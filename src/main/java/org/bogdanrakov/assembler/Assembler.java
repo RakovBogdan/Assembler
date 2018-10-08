@@ -3,7 +3,7 @@ package org.bogdanrakov.assembler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Assembler {
 
     public static final String HACK_EXTENSION = ".hack";
 
