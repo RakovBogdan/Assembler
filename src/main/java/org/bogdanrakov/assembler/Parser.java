@@ -5,17 +5,20 @@ import java.util.List;
 
 class Parser {
     private List<String> lines;
+    private String currentCommand;
+    private int currentLineIndex = -1;
 
     Parser(List<String> lines) {
         this.lines = lines;
     }
 
     boolean hasMoreLines() {
-        return false;
+        return currentLineIndex < lines.size() - 1;
     }
 
     void advance() {
-
+        currentLineIndex++;
+        currentCommand = lines.get(currentLineIndex);
     }
 
     CommandType commandType() {

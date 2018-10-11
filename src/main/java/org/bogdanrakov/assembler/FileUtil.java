@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FileReader {
+public class FileUtil {
 
     public static List<String> readFileLines(String fileName) {
         List<String> lines = new ArrayList<>();
