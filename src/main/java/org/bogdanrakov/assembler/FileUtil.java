@@ -13,15 +13,11 @@ import java.util.stream.Collectors;
 public class FileUtil {
 
     public static List<String> readFileLines(String fileName) {
-        List<String> lines = new ArrayList<>();
-
         try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
-            lines = br.lines().collect(Collectors.toList());
+            return br.lines().collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return lines;
     }
 
     public static void writeLinesToNewFile(List<String> lines, String newFileName) {
