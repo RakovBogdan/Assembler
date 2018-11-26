@@ -26,17 +26,34 @@ public class Assembler {
         while (parser.hasMoreLines()) {
             parser.advance();
             CommandType commandType = parser.commandType();
-            if (commandType.equals(CommandType.A_COMMAND) || commandType.equals(CommandType.L_COMMAND)) {
-                assemblyResult.add("0" + parser.symbol());
+            if (commandType.equals(CommandType.A_COMMAND)) {
+                assemblyResult.add("0" + convertDecimalToBinary(parser.getCurrentCommand().substring(1)));
             } else {
                 String destination = parser.destination();
+                String destinationBinary = Code.destination(destination);
                 String compute = parser.compute();
+                String computeBinary = Code.compute(compute);
                 String jump = parser.jump();
-                String computeInstruction = "111" + compute + destination + jump;
+                String jumpBinary = Code.jump(jump);
+
+                String computeInstruction = "111" + computeBinary + destinationBinary + jumpBinary;
                 assemblyResult.add(computeInstruction);
             }
         }
 
         return assemblyResult;
     }
+
+    String convertDecimalToBinary(String decimal) {
+        StringBuffer binary = new StringBuffer();
+        int decimalNumber = Integer.getInteger(decimal);
+        recursiveToBinary(decimalNumber, binary);
+
+        return binary.reverse().toString();
+    }
+
+    int recursiveToBinary(int quotient, StringBuffer sb) {
+        return 0;
+    }
+
 }

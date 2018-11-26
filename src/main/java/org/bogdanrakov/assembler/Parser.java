@@ -44,14 +44,40 @@ class Parser {
     }
 
     String destination() {
-        return null;
+        String destination = null;
+        int destinationCommandEnd = currentCommand.indexOf("=");
+        if (destinationCommandEnd != -1) {
+            destination = currentCommand.substring(0, destinationCommandEnd);
+        }
+        return destination;
     }
 
     String compute() {
-        return null;
+        String compute = null;
+        int destinationCommandEnd = currentCommand.indexOf("=");
+        int jumpCommandStart = currentCommand.indexOf(";");
+        if (jumpCommandStart != -1 && destinationCommandEnd != -1) {
+            compute = currentCommand.substring(destinationCommandEnd + 1, jumpCommandStart);
+        } else if (jumpCommandStart != -1) {
+            compute = currentCommand.substring(0, jumpCommandStart);
+        }
+        return compute;
     }
 
     String jump() {
-        return null;
+        String jump = null;
+        int jumpCommandStart = currentCommand.indexOf(";");
+        if (jumpCommandStart != -1) {
+            jump = currentCommand.substring(jumpCommandStart + 1);
+        }
+        return jump;
+    }
+
+    public String getCurrentCommand() {
+        return currentCommand;
+    }
+
+    public void setCurrentCommand(String currentCommand) {
+        this.currentCommand = currentCommand;
     }
 }
