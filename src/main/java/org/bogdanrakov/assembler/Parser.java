@@ -22,7 +22,18 @@ class Parser {
     }
 
     CommandType commandType() {
-        return CommandType.A_COMMAND;
+        CommandType commandType = null;
+        if (currentCommand.startsWith("@")) {
+            if (Character.isDigit(currentCommand.charAt(1))) {
+                commandType = CommandType.A_COMMAND;
+            } else {
+                commandType = CommandType.L_COMMAND;
+            }
+        } else {
+            commandType = CommandType.C_COMMAND;
+        }
+
+        return commandType;
     }
 
     String symbol() {
