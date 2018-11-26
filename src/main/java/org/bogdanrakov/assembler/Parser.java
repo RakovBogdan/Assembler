@@ -1,6 +1,5 @@
 package org.bogdanrakov.assembler;
 
-import java.io.File;
 import java.util.List;
 
 class Parser {
@@ -17,18 +16,22 @@ class Parser {
     }
 
     void advance() {
-        currentLineIndex++;
-        currentCommand = lines.get(currentLineIndex);
+        do {
+            currentLineIndex++;
+            currentCommand = lines.get(currentLineIndex).replaceAll(" ", "");
+            int commentStart = currentCommand.indexOf("//");
+            if (commentStart != -1) {
+                currentCommand = currentCommand.substring(0, commentStart);
+            }
+        } while (currentCommand.length() == 0);
     }
 
     CommandType commandType() {
-        CommandType commandType = null;
+        CommandType commandType;
         if (currentCommand.startsWith("@")) {
-            if (Character.isDigit(currentCommand.charAt(1))) {
-                commandType = CommandType.A_COMMAND;
-            } else {
-                commandType = CommandType.L_COMMAND;
-            }
+            commandType = CommandType.A_COMMAND;
+        } else if (currentCommand.startsWith("(")) {
+            commandType = CommandType.L_COMMAND;
         } else {
             commandType = CommandType.C_COMMAND;
         }

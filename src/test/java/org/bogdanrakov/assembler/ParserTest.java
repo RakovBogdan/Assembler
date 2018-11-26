@@ -23,7 +23,7 @@ public class ParserTest {
 
     @Test
     public void testCommandTypeL() {
-        Parser parser = new Parser(Stream.of("@i").collect(Collectors.toList()));
+        Parser parser = new Parser(Stream.of("(LABEL)").collect(Collectors.toList()));
         parser.advance();
 
         assertEquals(CommandType.L_COMMAND, parser.commandType());
