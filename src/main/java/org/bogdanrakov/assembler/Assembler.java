@@ -46,7 +46,7 @@ public class Assembler {
 
     String convertDecimalToBinary(String decimal) {
         StringBuffer binary = new StringBuffer();
-        int decimalNumber = Integer.getInteger(decimal);
+        int decimalNumber = Integer.parseInt(decimal);
         recursiveToBinary(decimalNumber, binary);
 
         return binary.reverse().toString();
