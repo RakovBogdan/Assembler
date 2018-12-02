@@ -50,10 +50,15 @@ public class Assembler {
         int decimalNumber = Integer.parseInt(decimal);
         recursiveToBinary(decimalNumber, binary);
 
+        int missingZeroes = 15 - binary.length();
+        for (int i = 0; i < missingZeroes; i++) {
+            binary.append("0");
+        }
+
         return binary.reverse().toString();
     }
 
-    void recursiveToBinary(int quotient, StringBuffer sb) {
+    private void recursiveToBinary(int quotient, StringBuffer sb) {
         if (quotient == 0) {
             return;
         }

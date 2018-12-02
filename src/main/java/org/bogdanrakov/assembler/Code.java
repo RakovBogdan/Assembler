@@ -62,14 +62,26 @@ public class Code {
 
 
     public static String destination(String destinationMnemonic) {
-        return destinationToBinary.get(destinationMnemonic);
+        String destination = destinationToBinary.get(destinationMnemonic);
+        if (destination == null) {
+            destination = "000";
+        }
+        return destination;
     }
 
     public static String compute(String computeMnemonic) {
-        return computeToBinary.get(computeMnemonic);
+        String compute = computeToBinary.get(computeMnemonic);
+        if (compute == null) {
+            compute = "0000000";
+        }
+        return compute;
     }
 
     public static String jump(String jumpMnemonic) {
-        return jumpToBinary.get(jumpMnemonic);
+        String jump = jumpToBinary.get(jumpMnemonic);
+        if (jump == null) {
+            jump = "000";
+        }
+        return jump;
     }
 }
