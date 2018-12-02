@@ -2,6 +2,7 @@ package org.bogdanrakov.assembler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
 
 public class Assembler {
 
@@ -52,8 +53,15 @@ public class Assembler {
         return binary.reverse().toString();
     }
 
-    int recursiveToBinary(int quotient, StringBuffer sb) {
-        return 0;
+    void recursiveToBinary(int quotient, StringBuffer sb) {
+        if (quotient == 0) {
+            return;
+        }
+
+        int newQuotient = quotient / 2;
+        int remainder = quotient % 2;
+        sb.append(remainder);
+        recursiveToBinary(newQuotient, sb);
     }
 
 }
