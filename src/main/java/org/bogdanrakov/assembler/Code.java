@@ -37,21 +37,39 @@ public class Code {
             new AbstractMap.SimpleEntry<>("D-M", "1010011"),
             new AbstractMap.SimpleEntry<>("M-D", "1000111"),
             new AbstractMap.SimpleEntry<>("D&M", "1000000"),
-            new AbstractMap.SimpleEntry<>("D|M", "1010101"))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    private static Map<String, String> jumpToBinary = new HashMap<>();
-    private static Map<String, String> mnemonicToBinary = new HashMap<>();
+            new AbstractMap.SimpleEntry<>("D|M", "1010101")
+    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    private static Map<String, String> jumpToBinary = Stream.of(
+            new AbstractMap.SimpleEntry<>("JGT", "001"),
+            new AbstractMap.SimpleEntry<>("JEQ", "010"),
+            new AbstractMap.SimpleEntry<>("JGE", "011"),
+            new AbstractMap.SimpleEntry<>("JLT", "100"),
+            new AbstractMap.SimpleEntry<>("JNE", "101"),
+            new AbstractMap.SimpleEntry<>("JLE", "110"),
+            new AbstractMap.SimpleEntry<>("JMP", "111")
+    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    private static Map<String, String> destinationToBinary = Stream.of(
+            new AbstractMap.SimpleEntry<>("A", "100"),
+            new AbstractMap.SimpleEntry<>("D", "010"),
+            new AbstractMap.SimpleEntry<>("M", "001"),
+            new AbstractMap.SimpleEntry<>("AD", "110"),
+            new AbstractMap.SimpleEntry<>("AM", "101"),
+            new AbstractMap.SimpleEntry<>("DM", "001"),
+            new AbstractMap.SimpleEntry<>("AMD", "111")
+    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 
     public static String destination(String destinationMnemonic) {
-        return destinationMnemonic;
+        return destinationToBinary.get(destinationMnemonic);
     }
 
     public static String compute(String computeMnemonic) {
-        return computeMnemonic;
+        return computeToBinary.get(computeMnemonic);
     }
 
     public static String jump(String jumpMnemonic) {
-        return jumpMnemonic;
+        return jumpToBinary.get(jumpMnemonic);
     }
 }
