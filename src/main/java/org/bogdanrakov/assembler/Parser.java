@@ -60,6 +60,8 @@ class Parser {
             compute = currentCommand.substring(destinationCommandEnd + 1, jumpCommandStart);
         } else if (jumpCommandStart != -1) {
             compute = currentCommand.substring(0, jumpCommandStart);
+        } else {
+            compute = currentCommand.substring(destinationCommandEnd + 1);
         }
         return compute;
     }
