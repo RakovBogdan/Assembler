@@ -29,7 +29,7 @@ public class Code {
             new AbstractMap.SimpleEntry<>("D|A", "0010101"),
 
             new AbstractMap.SimpleEntry<>("M", "1110000"),
-            new AbstractMap.SimpleEntry<>("!M", "0110001"),
+            new AbstractMap.SimpleEntry<>("!M", "1110001"),
             new AbstractMap.SimpleEntry<>("-M", "1110011"),
             new AbstractMap.SimpleEntry<>("M+1", "1110111"),
             new AbstractMap.SimpleEntry<>("M-1", "1110010"),
@@ -56,7 +56,7 @@ public class Code {
             new AbstractMap.SimpleEntry<>("M", "001"),
             new AbstractMap.SimpleEntry<>("AD", "110"),
             new AbstractMap.SimpleEntry<>("AM", "101"),
-            new AbstractMap.SimpleEntry<>("DM", "001"),
+            new AbstractMap.SimpleEntry<>("MD", "011"),
             new AbstractMap.SimpleEntry<>("AMD", "111")
     ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
