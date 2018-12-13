@@ -6,23 +6,25 @@ import java.util.zip.ZipEntry;
 
 public class Assembler {
 
-    public static final String HACK_EXTENSION = ".hack";
+    private SymbolTable symbolTable;
 
-    public static void main(String[] args) {
-        Assembler assembler = new Assembler();
+    private void populateSymbolTable() {
+        symbolTable = new SymbolTable();
 
-        String assemblyFilename = args[0];
-
-        List<String> lines = FileUtil.readFileLines(assemblyFilename);
-        List<String> assemblyResult = assembler.assemble(lines);
-
-        String newHackFileName = FileUtil.changeExtensionInFileName(assemblyFilename, HACK_EXTENSION);
-        FileUtil.writeLinesToNewFile(assemblyResult, newHackFileName);
     }
 
-    private List<String> assemble(List<String> mnemonics) {
+    public List<String> assemble(List<String> mnemonics) {
         Parser parser = new Parser(mnemonics);
         List<String> assemblyResult = new ArrayList<>();
+
+        for (String mnemonic: mnemonics) {
+            while (parser.hasMoreLines()) {
+                CommandType commandType = parser.commandType();
+                if (commandType.equals(CommandType.L_COMMAND)) {
+
+                }
+            }
+        }
 
         while (parser.hasMoreLines()) {
             parser.advance();
@@ -68,5 +70,4 @@ public class Assembler {
         sb.append(remainder);
         recursiveToBinary(newQuotient, sb);
     }
-
 }

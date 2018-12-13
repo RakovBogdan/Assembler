@@ -9,9 +9,24 @@ import java.util.stream.Stream;
 public class SymbolTable {
 
     private Map<String, Integer> symbolTable = Stream.of(
-            new AbstractMap.SimpleEntry<>("R0", 0),
-            new AbstractMap.SimpleEntry<>("", 1)
+            new AbstractMap.SimpleEntry<>("SCREEN", 16384),
+            new AbstractMap.SimpleEntry<>("KBD", 25676),
+            new AbstractMap.SimpleEntry<>("SP", 0),
+            new AbstractMap.SimpleEntry<>("LCL", 1),
+            new AbstractMap.SimpleEntry<>("ARG", 2),
+            new AbstractMap.SimpleEntry<>("THIS", 3),
+            new AbstractMap.SimpleEntry<>("THAT", 4)
     ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    public SymbolTable() {
+        populateMapWithRegisters();
+    }
+
+    private void populateMapWithRegisters() {
+        for (int i = 0; i < 16; i++) {
+            symbolTable.put("R" + i, i);
+        }
+    }
 
     public void addEntry(String symbol, int address) {
         symbolTable.put(symbol, address);
