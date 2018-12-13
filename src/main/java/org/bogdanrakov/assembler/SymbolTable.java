@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 
 public class SymbolTable {
 
+    private int nextVariableAddress = 16;
+
     private Map<String, Integer> symbolTable = Stream.of(
             new AbstractMap.SimpleEntry<>("SCREEN", 16384),
             new AbstractMap.SimpleEntry<>("KBD", 25676),
@@ -32,11 +34,19 @@ public class SymbolTable {
         symbolTable.put(symbol, address);
     }
 
+    public void addEntry(String symbol) {
+        symbolTable.put(symbol, nextVariableAddress++);
+    }
+
     public int getAddress(String symbol) {
         return symbolTable.get(symbol);
     }
 
     public boolean contains(String symbol) {
         return symbolTable.containsKey(symbol);
+    }
+
+    public int getNextVariableAddress() {
+        return nextVariableAddress;
     }
 }

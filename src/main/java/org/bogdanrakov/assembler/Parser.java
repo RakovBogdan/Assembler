@@ -40,7 +40,7 @@ class Parser {
     }
 
     String symbol() {
-        return null;
+        return currentCommand.substring(1, currentCommand.length() - 1);
     }
 
     String destination() {
@@ -79,7 +79,7 @@ class Parser {
         return currentCommand;
     }
 
-    public void setCurrentCommand(String currentCommand) {
-        this.currentCommand = currentCommand;
+    public int getCurrentLineIndex() {
+        return currentLineIndex;
     }
 }

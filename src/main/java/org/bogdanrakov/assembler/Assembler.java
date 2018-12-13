@@ -15,28 +15,39 @@ public class Assembler {
 
     public List<String> assemble(List<String> mnemonics) {
         Parser parser = new Parser(mnemonics);
+        SymbolTable symbolTable = new SymbolTable();
         List<String> assemblyResult = new ArrayList<>();
 
         for (String mnemonic: mnemonics) {
             while (parser.hasMoreLines()) {
                 CommandType commandType = parser.commandType();
                 if (commandType.equals(CommandType.L_COMMAND)) {
-
+                    symbolTable.addEntry(parser.symbol(), parser.getCurrentLineIndex() + 1);
                 }
             }
         }
 
-        while (parser.hasMoreLines()) {
-            parser.advance();
-            CommandType commandType = parser.commandType();
+        Parser secondParser = new Parser(mnemonics);
+
+        while (secondParser.hasMoreLines()) {
+            secondParser.advance();
+            CommandType commandType = secondParser.commandType();
             if (commandType.equals(CommandType.A_COMMAND)) {
-                assemblyResult.add("0" + convertDecimalToBinary(parser.getCurrentCommand().substring(1)));
+                String value = secondParser.getCurrentCommand().substring(1);
+                if (isDecimal(value)) {
+                    assemblyResult.add("0" + convertDecimalToBinary(value));
+                } else {
+                    if (!symbolTable.contains(value)) {
+                        symbolTable.addEntry(value);
+                    }
+                    assemblyResult.add("0" + convertDecimalToBinary(String.valueOf(symbolTable.getAddress(value))));
+                }
             } else {
-                String destination = parser.destination();
+                String destination = secondParser.destination();
                 String destinationBinary = Code.destination(destination);
-                String compute = parser.compute();
+                String compute = secondParser.compute();
                 String computeBinary = Code.compute(compute);
-                String jump = parser.jump();
+                String jump = secondParser.jump();
                 String jumpBinary = Code.jump(jump);
 
                 String computeInstruction = "111" + computeBinary + destinationBinary + jumpBinary;
@@ -45,6 +56,10 @@ public class Assembler {
         }
 
         return assemblyResult;
+    }
+
+    private boolean isDecimal(String value) {
+        return false;
     }
 
     String convertDecimalToBinary(String decimal) {
