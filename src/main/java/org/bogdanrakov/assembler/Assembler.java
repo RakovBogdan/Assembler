@@ -6,25 +6,19 @@ import java.util.zip.ZipEntry;
 
 public class Assembler {
 
-    private SymbolTable symbolTable;
-
-    private void populateSymbolTable() {
-        symbolTable = new SymbolTable();
-
-    }
-
     public List<String> assemble(List<String> mnemonics) {
         Parser parser = new Parser(mnemonics);
         SymbolTable symbolTable = new SymbolTable();
         List<String> assemblyResult = new ArrayList<>();
 
-        for (String mnemonic: mnemonics) {
-            while (parser.hasMoreLines()) {
-                parser.advance();
-                CommandType commandType = parser.commandType();
-                if (commandType.equals(CommandType.L_COMMAND)) {
-                    symbolTable.addEntry(parser.symbol(), parser.getCurrentLineIndex() + 1);
-                }
+        int currentCommand = -1;
+        while (parser.hasMoreLines()) {
+            parser.advance();
+            CommandType commandType = parser.commandType();
+            if (commandType.equals(CommandType.L_COMMAND)) {
+                symbolTable.addEntry(parser.symbol(), currentCommand + 1);
+            } else {
+                currentCommand++;
             }
         }
 
@@ -60,7 +54,7 @@ public class Assembler {
     }
 
     private boolean isDecimal(String value) {
-        return false;
+        return value.matches("\\d*");
     }
 
     String convertDecimalToBinary(String decimal) {

@@ -78,8 +78,4 @@ class Parser {
     public String getCurrentCommand() {
         return currentCommand;
     }
-
-    public int getCurrentLineIndex() {
-        return currentLineIndex;
-    }
 }
