@@ -20,6 +20,7 @@ public class Assembler {
 
         for (String mnemonic: mnemonics) {
             while (parser.hasMoreLines()) {
+                parser.advance();
                 CommandType commandType = parser.commandType();
                 if (commandType.equals(CommandType.L_COMMAND)) {
                     symbolTable.addEntry(parser.symbol(), parser.getCurrentLineIndex() + 1);
@@ -42,7 +43,7 @@ public class Assembler {
                     }
                     assemblyResult.add("0" + convertDecimalToBinary(String.valueOf(symbolTable.getAddress(value))));
                 }
-            } else {
+            } else if (commandType.equals(CommandType.C_COMMAND)) {
                 String destination = secondParser.destination();
                 String destinationBinary = Code.destination(destination);
                 String compute = secondParser.compute();
