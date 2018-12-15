@@ -4,13 +4,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 
-public class Assembler {
+class Assembler {
 
-    public List<String> assemble(List<String> mnemonics) {
-        Parser parser = new Parser(mnemonics);
-        SymbolTable symbolTable = new SymbolTable();
+    private static final int WORD_SIZE = 16;
+    private static final String A_COMMAND_BEGGINING = "0";
+    private static final String C_COMMAND_BEGINNIG = "111";
+    private static final String DIGITS_REGEX = "\\d*";
+    private SymbolTable symbolTable;
+    private Parser parser;
+
+    Assembler(List<String> mnemonics) {
+        symbolTable = new SymbolTable();
+        parser = new Parser(mnemonics);
+    }
+
+    List<String> assemble() {
+
+        populateSymbolTable();
+
         List<String> assemblyResult = new ArrayList<>();
+        parser.reset();
 
+        while (parser.hasMoreLines()) {
+            parser.advance();
+            CommandType commandType = parser.commandType();
+            if (commandType.equals(CommandType.A_COMMAND)) {
+                String value = parser.getCurrentCommand().substring(1);
+                if (isDecimal(value)) {
+                    assemblyResult.add(A_COMMAND_BEGGINING + convertDecimalToBinary(value, WORD_SIZE));
+                } else {
+                    if (!symbolTable.contains(value)) {
+                        symbolTable.addEntry(value);
+                    }
+                    String address = String.valueOf(symbolTable.getAddress(value));
+                    assemblyResult.add(A_COMMAND_BEGGINING
+                            + convertDecimalToBinary(address, WORD_SIZE));
+                }
+            } else if (commandType.equals(CommandType.C_COMMAND)) {
+                String destination = parser.destination();
+                String destinationBinary = Code.destination(destination);
+                String compute = parser.compute();
+                String computeBinary = Code.compute(compute);
+                String jump = parser.jump();
+                String jumpBinary = Code.jump(jump);
+
+                String computeInstruction = C_COMMAND_BEGINNIG + computeBinary + destinationBinary + jumpBinary;
+                assemblyResult.add(computeInstruction);
+            }
+        }
+
+        return assemblyResult;
+    }
+
+    private void populateSymbolTable() {
         int currentCommand = -1;
         while (parser.hasMoreLines()) {
             parser.advance();
@@ -21,48 +67,18 @@ public class Assembler {
                 currentCommand++;
             }
         }
-
-        Parser secondParser = new Parser(mnemonics);
-
-        while (secondParser.hasMoreLines()) {
-            secondParser.advance();
-            CommandType commandType = secondParser.commandType();
-            if (commandType.equals(CommandType.A_COMMAND)) {
-                String value = secondParser.getCurrentCommand().substring(1);
-                if (isDecimal(value)) {
-                    assemblyResult.add("0" + convertDecimalToBinary(value));
-                } else {
-                    if (!symbolTable.contains(value)) {
-                        symbolTable.addEntry(value);
-                    }
-                    assemblyResult.add("0" + convertDecimalToBinary(String.valueOf(symbolTable.getAddress(value))));
-                }
-            } else if (commandType.equals(CommandType.C_COMMAND)) {
-                String destination = secondParser.destination();
-                String destinationBinary = Code.destination(destination);
-                String compute = secondParser.compute();
-                String computeBinary = Code.compute(compute);
-                String jump = secondParser.jump();
-                String jumpBinary = Code.jump(jump);
-
-                String computeInstruction = "111" + computeBinary + destinationBinary + jumpBinary;
-                assemblyResult.add(computeInstruction);
-            }
-        }
-
-        return assemblyResult;
     }
 
     private boolean isDecimal(String value) {
-        return value.matches("\\d*");
+        return value.matches(DIGITS_REGEX);
     }
 
-    String convertDecimalToBinary(String decimal) {
+    String convertDecimalToBinary(String decimal, int binaryPositions) {
         StringBuffer binary = new StringBuffer();
         int decimalNumber = Integer.parseInt(decimal);
         recursiveToBinary(decimalNumber, binary);
 
-        int missingZeroes = 15 - binary.length();
+        int missingZeroes = binaryPositions - binary.length() - 1;
         for (int i = 0; i < missingZeroes; i++) {
             binary.append("0");
         }

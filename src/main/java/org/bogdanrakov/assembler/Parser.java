@@ -26,6 +26,10 @@ class Parser {
         } while (currentCommand.length() == 0);
     }
 
+    void reset() {
+        currentLineIndex = -1;
+    }
+
     CommandType commandType() {
         CommandType commandType;
         if (currentCommand.startsWith("@")) {
