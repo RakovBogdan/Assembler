@@ -2,13 +2,12 @@ package org.bogdanrakov.assembler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
 
 class Assembler {
 
     private static final int WORD_SIZE = 16;
-    private static final String A_COMMAND_BEGGINING = "0";
-    private static final String C_COMMAND_BEGINNIG = "111";
+    private static final String A_COMMAND_BEGINNING = "0";
+    private static final String C_COMMAND_BEGINNING = "111";
     private static final String DIGITS_REGEX = "\\d*";
     private SymbolTable symbolTable;
     private Parser parser;
@@ -31,13 +30,13 @@ class Assembler {
             if (commandType.equals(CommandType.A_COMMAND)) {
                 String value = parser.getCurrentCommand().substring(1);
                 if (isDecimal(value)) {
-                    assemblyResult.add(A_COMMAND_BEGGINING + convertDecimalToBinary(value, WORD_SIZE));
+                    assemblyResult.add(A_COMMAND_BEGINNING + convertDecimalToBinary(value, WORD_SIZE));
                 } else {
                     if (!symbolTable.contains(value)) {
                         symbolTable.addEntry(value);
                     }
                     String address = String.valueOf(symbolTable.getAddress(value));
-                    assemblyResult.add(A_COMMAND_BEGGINING
+                    assemblyResult.add(A_COMMAND_BEGINNING
                             + convertDecimalToBinary(address, WORD_SIZE));
                 }
             } else if (commandType.equals(CommandType.C_COMMAND)) {
@@ -48,7 +47,7 @@ class Assembler {
                 String jump = parser.jump();
                 String jumpBinary = Code.jump(jump);
 
-                String computeInstruction = C_COMMAND_BEGINNIG + computeBinary + destinationBinary + jumpBinary;
+                String computeInstruction = C_COMMAND_BEGINNING + computeBinary + destinationBinary + jumpBinary;
                 assemblyResult.add(computeInstruction);
             }
         }
